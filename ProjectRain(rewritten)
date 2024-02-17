@@ -1,0 +1,818 @@
+function(...)
+		(...)[...] = nil
+	end,
+	{
+		function(r)
+			return function()
+				local F = getgenv().require(game:GetService("ReplicatedStorage").Modules.ClientManager.KeyHandler)
+				task.spawn(function()
+					task.spawn(function()
+						for z, j in pairs(game.Players.LocalPlayer:GetDescendants()) do
+							if j.Name:match("ClientManager") then
+								j:Destroy()
+							end
+						end
+					end)
+				end)
+				task.wait(0.5)
+				if r[0][1][r[0][2]] - 912 ~= 7671 then
+					while true do
+					end
+				end
+				local V = debug.getupvalue(getrawmetatable(debug.getupvalue(F, 8)).__index, 1)[1][1]
+				local U = V[85]
+				local _ = V[86]
+				if not U or not _ then
+					repeat
+						V = debug.getupvalue(getrawmetatable(debug.getupvalue(F, 8)).__index, 1)[1][1]
+						U = V[85]
+						_ = V[86]
+						task.wait()
+					until U and _
+				end
+				local J
+				J = hookfunction(
+					Instance.new("RemoteEvent").FireServer,
+					newcclosure(function(z, ...)
+						if not checkcaller() then
+							if z.ClassName == "RemoteEvent" then
+								if z == U or z == _ then
+									return coroutine.yield()
+								end
+								local j = { ... }
+								if typeof(j[1]) == "table" and typeof(j[2]) == "table" then
+									if #j[1] == 2 then
+										print(z:GetFullName() .. " new ban remote?")
+										return coroutine.yield()
+									end
+								end
+							end
+						end
+						return J(z, ...)
+					end)
+				)
+				local k
+				k = hookfunction(coroutine.wrap, function(z, ...)
+					if not checkcaller() then
+						if debug.getinfo(z).source:match("InputClient") then
+							return function(...)
+								local j = { ... }
+								if j[1] == game:GetService("ScriptContext").Error then
+									return
+								end
+								return ...
+							end
+						end
+					end
+					return k(z, ...)
+				end)
+				local c, y, l
+				y = game.ReplicatedStorage.Requests.AcidCheck
+				local n
+				n = hookfunction(
+					getrawmetatable(game).__namecall,
+					newcclosure(function(z, ...)
+						if not checkcaller() then
+							local j = getnamecallmethod()
+							if j == "FireServer" then
+								local e = { ... }
+								if
+									(not c and typeof(e[1]) == "number" and typeof(e[2]) == "boolean" or z == c)
+									and r[1][1][r[1][2]].noFall
+								then
+									c = z
+									return coroutine.yield()
+								end
+								if z == U or z == _ then
+									return coroutine.yield()
+								elseif z == y and r[1][1][r[1][2]].noAcid then
+									return coroutine.yield()
+								elseif
+									l or #e >= 2 and typeof(e[1]) == "table" and typeof(e[2]) == "table" and #e[1] == 2
+								then
+									l = z
+									print(z:GetFullName() .. " new ban remote?")
+									return coroutine.yield()
+								end
+							end
+						end
+						return n(z, ...)
+					end)
+				)
+				local G
+				G = hookfunction(Instance.new("UnreliableRemoteEvent").FireServer, function(z, ...)
+					if r[2][1][r[2][2]] - 362 ~= 2443 then
+						while true do
+						end
+					end
+					local j = { ... }
+					if #j == 3 then
+						if typeof(j[1]) == "boolean" and typeof(j[2]) == "CFrame" and typeof(j[3]) == "table" then
+							getgenv().clickRemote = z
+							if getgenv().blockInput and r[1][1][r[1][2]].block_input then
+								return coroutine.yield()
+							end
+						end
+					end
+					return G(z, ...)
+				end)
+				getgenv().SAntiCheatBypass = true
+			end
+		end,
+		function(r)
+			return function()
+				local F = r[0][1][r[0][2]].Lighting
+				function childAdded(V)
+					if V.Name == "AreaAmbient" then
+						V:GetPropertyChangedSignal("Value"):Connect(function(U)
+							if r[1][1][r[1][2]].full_bright and U ~= Color3.new(1, 1, 1) then
+								F.AreaAmbient.Value = Color3.new(1, 1, 1)
+							end
+						end)
+					elseif V.Name == "AreaOutdoorAmbient" then
+						V:GetPropertyChangedSignal("Value"):Connect(function(U)
+							if r[1][1][r[1][2]].full_bright and U ~= Color3.new(1, 1, 1) then
+								F.AreaOutdoorAmbient.Value = Color3.new(1, 1, 1)
+							end
+						end)
+					elseif V.Name == "AreaBrightness" then
+						V:GetPropertyChangedSignal("Value"):Connect(function(U)
+							if r[1][1][r[1][2]].full_bright and U ~= 2 then
+								V.Value = 2
+							end
+						end)
+					elseif V.Name == "ClockVal" then
+						V:GetPropertyChangedSignal("Value"):Connect(function(U)
+							if r[1][1][r[1][2]].no_fog and U ~= 14 then
+								F.ClockVal.Value = 14
+							end
+						end)
+					end
+				end
+				F.ChildAdded:Connect(childAdded)
+				for V, U in pairs(F:GetChildren()) do
+					childAdded(U)
+				end
+			end
+		end,
+		function(r)
+			return function()
+				local F = getgenv().require(r[0][1][r[0][2]].ReplicatedStorage.EffectReplicator)
+				local V = getfenv(F.CreateEffect)
+				local U = V.clearEffects
+				local _ = Instance.new("VirtualInputManager")
+				local J = { "OffhandAttack", "HeavyAttack", "MediumAttack", "LightAttack", "UsingSpell" }
+				local k =
+					{ "NoMove", "NoJump", "NoJumpAlt", "Action", "Unconscious", "Knocked", "Carried", "Stun", "Knocked" }
+				function setupeffecthooks()
+					F.EffectAdded:connect(function(e)
+						if r[1][1][r[1][2]].fast_swing then
+							if table.find(J, e.Class) then
+								task.defer(function()
+									e:Remove(true)
+								end)
+							end
+						end
+						if r[1][1][r[1][2]].no_stun and table.find(k, e.Class) then
+							task.defer(function()
+								e:Remove(true)
+							end)
+						end
+					end)
+				end
+				setupeffecthooks()
+				function V.clearEffects()
+					U()
+					setupeffecthooks()
+				end
+				local c = {
+					"CarryObject",
+					"UsingSpell",
+					"NoAttack",
+					"Dodged",
+					"NoRoll",
+					"PreventRoll",
+					"Stun",
+					"Action",
+					"Carried",
+					"MobileAction",
+					"PreventAction",
+					"LightAttack",
+					"Blocking",
+					"ClientSlide",
+					"NoParkour",
+					"Knocked",
+					"Unconscious",
+					"Pinned",
+				}
+				local function y(e, N)
+					if not r[2][1][r[2][2]].rootPart or not N then
+						return false
+					end
+					if typeof(N) == "Vector3" then
+						N = { Position = N }
+					end
+					return (r[2][1][r[2][2]].rootPart.Position - N.Position).Magnitude <= e
+				end
+				local function l()
+					for e, N in pairs(F.Effects) do
+						if table.find(c, rawget(N, "Class")) then
+							rawset(F.Effects, N.Disabled, true)
+							task.delay(0.15, function()
+								rawset(F.Effects, N.Disabled, false)
+							end)
+						end
+					end
+					if r[1][1][r[1][2]].blatant_roll then
+						_:SendKeyEvent(true, "Q", false, game)
+						_:SendKeyEvent(false, "Q", false, game)
+						local e = false
+						repeat
+							for N, o in pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()) do
+								if o.Name:match("Roll") then
+									o:Stop()
+									e = true
+								end
+							end
+							for N, o in pairs(game.Players.LocalPlayer.Character.HumanoidRootPart:GetChildren()) do
+								if o.Name == "Mover" then
+									o:Destroy()
+								end
+							end
+							r[3][1][r[3][2]].renderStepped:wait()
+						until e
+					else
+						_:SendKeyEvent(true, "Q", false, game)
+						task.wait(math.random(100, 700) / 10000)
+						if r[1][1][r[1][2]].roll_cancel then
+							mouse2click()
+						end
+						_:SendKeyEvent(false, "Q", false, game)
+					end
+				end
+				local function n()
+					_:SendKeyEvent(true, "F", false, game)
+					task.wait(0.1)
+					_:SendKeyEvent(false, "F", false, game)
+				end
+				function runAutoFeint()
+					if F:FindEffect("MidAttack") and r[1][1][r[1][2]].auto_feint then
+						mouse2click(0, 0)
+					end
+				end
+				local G = game:GetService("Stats"):WaitForChild("PerformanceStats"):WaitForChild("Ping")
+				function adjustedWait(e)
+					local N = tick()
+					repeat
+						task.wait()
+					until tick() - N > math.clamp(e - G:GetValue() / 1000, 0, 90000)
+				end
+				local z = {
+					Perilous = function(e)
+						if not string.find(e.char.Name, ".chaser") then
+							return
+						end
+						adjustedWait(0.5)
+						l()
+					end,
+					EthironPointSpikes = function(e)
+						adjustedWait(0.5)
+						for N, o in next, e.points do
+							if y(20, o.pos) then
+								l()
+								break
+							end
+						end
+					end,
+					GolemLaserFire = function(e)
+						if not y(15, e.aimPos) then
+							return
+						end
+						l()
+					end,
+					WindCarve = function(e)
+						if e.char == r[2][1][r[2][2]].character then
+							return
+						end
+						if e.command ~= "startAttack" or not y(17, e.char.PrimaryPart) then
+							return
+						end
+						local N = tick()
+						repeat
+							task.spawn(function()
+								n()
+							end)
+							task.wait(0.2)
+						until tick() - N > e.dur + 0.5
+						table.foreach(e, warn)
+					end,
+				}
+				local j = r[4][1][r[4][2]]("games/deepwoken/features/autoParry/aztupData")(
+					adjustedWait,
+					n,
+					l,
+					y,
+					runAutoFeint
+				)
+				game:GetService("ReplicatedStorage").Requests.ClientEffect.OnClientEvent:Connect(function(e, N)
+					if not r[1][1][r[1][2]].auto_parry then
+						return
+					end
+					local o = z[e]
+					if o then
+						o(N, e)
+					end
+				end)
+				function setup(e)
+					local N = {}
+					do
+						N.__index = N
+						function N.New(o)
+							local C = setmetatable({}, N)
+							C.Entity = o
+							if
+								r[0][1][r[0][2]].Players.LocalPlayer.character
+								and C.Entity == r[0][1][r[0][2]].Players.LocalPlayer.character
+							then
+								local q = "rbxassetid://6415331110"
+								local t = "rbxassetid://6415330705"
+								local E = "rbxassetid://6415331617"
+								o:WaitForChild(r[5][1][r[5][2]], 9e9).AnimationPlayed:Connect(function(A)
+									if r[1][1][r[1][2]].auto_fish then
+										local g = A.Animation.AnimationId
+										local R = Enum.KeyCode.Unknown
+										if g == q then
+											R = "A"
+										elseif g == E then
+											R = "D"
+										elseif g == t then
+											R = "S"
+										elseif g == "rbxassetid://6415329642" then
+											task.wait(7.5)
+											if
+												r[1][1][r[1][2]].auto_fish
+												and r[2][1][r[2][2]].character:FindFirstChild("Fishing Rod")
+											then
+												print("Click!")
+												_:SendMouseButtonEvent(350, 350, 0, true, game, 1)
+												_:SendMouseButtonEvent(350, 350, 0, false, game, 1)
+											end
+										end
+										if R ~= Enum.KeyCode.Unknown then
+											print("key")
+											_:SendKeyEvent(true, R, false, game)
+											while A.IsPlaying do
+												_:SendMouseButtonEvent(350, 350, 0, true, game, 1)
+												_:SendMouseButtonEvent(350, 350, 0, false, game, 1)
+												print("Click!")
+												task.wait(0.06666666666666667)
+											end
+											_:SendKeyEvent(false, R, false, game)
+										end
+									end
+								end)
+								return
+							end
+							C.RollNext = false
+							C.AnimationPlayedConnection = o:WaitForChild(r[5][1][r[5][2]], 9e9).AnimationPlayed
+								:Connect(function(q)
+									N.AnimationHandle(C, q)
+								end)
+							return C
+						end
+						function N.AnimationHandle(o, C)
+							local q = e[tostring(C.Animation.AnimationId:match("%d+"))]
+							if q and (r[1][1][r[1][2]].pvpAssist or r[1][1][r[1][2]].auto_parry) then
+								if typeof(q) == "function" and r[1][1][r[1][2]].auto_parry then
+									q(C, o.Entity)
+									return
+								end
+								if
+									(o.Entity:GetPivot().Position - r[2][1][r[2][2]].character:GetPivot().Position).Magnitude
+									> q.range
+								then
+									return
+								end
+								timed = tick()
+								getgenv().blockInput = true
+								repeat
+									task.wait()
+									runAutoFeint()
+									if C.TimePosition == 0 and tick() - timed > 0.1 and C.Speed > 0.1 then
+										if r[1][1][r[1][2]].pvpAssist and o.Entity.Name:sub(1, 1) ~= "." then
+											o.RollNext = true
+										end
+										getgenv().blockInput = false
+										return
+									end
+									if not C.IsPlaying then
+										getgenv().blockInput = false
+										return
+									end
+								until tick() - timed > q.parryPoints[1] - G:GetValue() / 1000
+								getgenv().blockInput = false
+								if r[1][1][r[1][2]].auto_parry or o.RollNext then
+									if q.roll or o.RollNext then
+										l()
+										o.RollNext = false
+									else
+										n()
+									end
+									if #q.parryPoints > 1 then
+										getgenv().blockInput = true
+										for t, E in pairs(q.parryPoints) do
+											if t ~= 1 then
+												runAutoFeint()
+												adjustedWait(E)
+												n()
+											end
+										end
+										getgenv().blockInput = false
+									end
+								end
+							end
+						end
+						function N:Disconnect()
+							self.AnimationPlayedConnection:Disconnect()
+						end
+					end
+					return N
+				end
+				if game.PlaceId == 8668476218 then
+					local e = true
+					workspace.DescendantAdded:Connect(function(N)
+						if N.Name == "BloodTendrilBeam" then
+							if not e then return end
+							e = false
+							getgenv().blockInput = true
+							task.delay(0.1, function()
+								e = true
+							end)
+							adjustedWait(0.55)
+							n()
+							getgenv().blockInput = false
+						elseif N.Name == "SpikeStabEff" then
+							_G.canAttack = false
+							adjustedWait(0.6)
+							if not y(20, N) then
+								getgenv().blockInput = false
+								return
+							end
+							print(N, "got added", N:GetFullName())
+							n()
+							getgenv().blockInput = false
+						elseif N.Name == "ParticleEmitter3" and string.find(N:GetFullName(), "avatar") then
+							adjustedWait(0.75)
+							local o = N.Parent.Parent.Parent
+							local C = o and o:FindFirstChild("Target")
+							if C and C.Value ~= r[2][1][r[2][2]].character then
+								return
+							end
+							_G.canAttack = false
+							warn("AVATAR BEAM: now we parry")
+							repeat
+								n()
+								task.wait(0.1)
+							until not N.Parent or not N.Enabled
+							getgenv().blockInput = false
+						elseif N.Name == "GrabPart" then
+							repeat
+								task.wait()
+							until not N.Parent or y(20, N)
+							if not N.Parent then
+								return
+							end
+							l()
+						elseif N.Name == "HitTendril" then
+							repeat
+								task.wait()
+							until not N.Parent or y(150, N)
+							if not N.Parent then
+								return
+							end
+							adjustedWait(0.55)
+							n()
+						elseif N.Name == "ArdourBall2" then
+							repeat
+								task.wait()
+							until not N.Parent or y(50, N)
+							if not N.Parent then
+								return
+							end
+							adjustedWait(0.3)
+							n()
+						elseif N.Name == "BoneSpear" then
+							repeat
+								task.wait()
+							until not N.Parent or y(75, N)
+							if not N.Parent then
+								return
+							end
+							adjustedWait(0.2)
+							n()
+						end
+					end)
+				end
+				return { setup = setup }
+			end
+		end,
+		function(r)
+			return function()
+				runService = game:GetService("RunService")
+				toworldspace = CFrame.new().VectorToWorldSpace
+				v3new = Vector3.new
+				v2new = Vector2.new
+				camera = workspace.CurrentCamera
+				cameraCF = camera.CFrame
+				worldToViewportPoint = camera.WorldToViewportPoint
+				topRightOffset = v3new(-3.0, 1, 0)
+				bottomLeftOffset = v3new(-3.5, -4.75, 0)
+				topRightBoxOffset = v3new(2.5, 1, 0)
+				bottomLeftBoxOffset = v3new(-2.5, -4.75, 0)
+				nameOffset = v3new(0, 2.75, 0)
+				red = Color3.new(1, 0, 0)
+				green = Color3.new(0, 1, 0)
+				function ConvertVector(V)
+					return toworldspace(cameraCF, V)
+				end
+				function updateCamera()
+					cameraCF = camera.CFrame
+				end
+				function createDrawingValue(V, U)
+					local _ = Drawing.new(V)
+					for J, k in pairs(U) do
+						_[J] = k
+					end
+					return _
+				end
+				runService.RenderStepped:Connect(updateCamera)
+				if r[0][1][r[0][2]] - 609 ~= 2196 then
+					while true do
+					end
+				end
+				local F = {}
+				do
+					F.__index = F
+					F.ClassName = "BaseESP"
+					F.BoxEnabled = true
+					F.HealthEnabled = true
+					F.registerFolder = function(V, U, _)
+						for J, k in pairs(V:GetChildren()) do
+							if U and not U(k) then
+								continue
+							end
+							_.entity = k
+							task.spawn(F.setup, _)
+						end
+						V.ChildAdded:Connect(function(J)
+							if r[1][1][r[1][2]] and (U and not U(J)) then
+								return
+							end
+							_.entity = J
+							task.spawn(F.setup, _)
+						end)
+					end
+					F.setup = function(V)
+						local U = setmetatable({}, F)
+						U.Entity = V.entity
+						U.wasOn = false
+						U.Humanoid = V.entity:FindFirstChildOfClass(r[2][1][r[2][2]])
+						if V.waitForRoot then
+							repeat
+								task.wait()
+								U.RootPart = V.entity:FindFirstChildOfClass(r[2][1][r[2][2]])
+										and V.entity:FindFirstChildOfClass(r[2][1][r[2][2]]).RootPart
+									or V.entity:FindFirstChild(r[3][1][r[3][2]])
+									or V.entity:FindFirstChildOfClass("BasePart")
+							until U.RootPart
+						end
+						U.Name = createDrawingValue(
+							"Text",
+							{ Text = "", Size = 18, Center = true, Outline = true, Font = 3, Color = V.color }
+						)
+						if r[4][1][r[4][2]] and V.box then
+							U.Box = createDrawingValue("Quad", { Filled = false, Color = V.color })
+						end
+						if V.healthbar then
+							U.HealthBarInside = createDrawingValue("Quad", { Filled = true, Color = V.color })
+							U.HealthBarOutline =
+								createDrawingValue("Quad", { Filled = false, ZIndex = 5, Color = V.color })
+						end
+						U.GrabPosition = V.custompositiongrabber
+						U.NameGrabber = V.namegrabber
+						U.OnCheck = V.isOn
+						U.CACHE = ""
+						U.dontDestroyMePlz = V.dontDestroyMePlz
+						U.DrawingConnection = r[5][1][r[5][2]].heartbeat:connect("esp", function()
+							U:draw()
+						end)
+						return U
+					end
+					function F:destroy()
+						local V = Drawing.new("Square")
+						xpcall(function()
+							V:Remove()
+							self.Name:Remove()
+							self.HealthBarOutline:Remove()
+							self.Box:Remove()
+							self.HealthBarInside:Remove()
+						end, function()
+							V:Destroy()
+							self.Name:Destroy()
+							self.HealthBarOutline:Destroy()
+							self.Box:Destroy()
+							self.HealthBarInside:Destroy()
+						end)
+						self.DrawingConnection:Disconnect()
+					end
+					function F:draw()
+						local V = self.Entity
+						if r[6][1][r[6][2]] + 4354 ~= 12937 then
+							while true do
+							end
+						end
+						local U
+						local _
+						local J
+						if r[0][1][r[0][2]] + 56 ~= 2861 then
+							while true do
+							end
+						end
+						local k
+						local c = self.OnCheck(self)
+						if not c then
+							if r[1][1][r[1][2]] and self.wasOn then
+								U = self.Name
+								_ = self.HealthBarInside
+								J = self.HealthBarOutline
+								k = self.Box
+								if r[4][1][r[4][2]] and U.Visible then
+									U.Visible = false
+								end
+								if _ then
+									J.Visible = false
+									_.Visible = false
+								end
+								if k then
+									k.Visible = false
+								end
+								self.wasOn = false
+							end
+							return
+						end
+						self.wasOn = true
+						U = self.Name
+						_ = self.HealthBarInside
+						J = self.HealthBarOutline
+						k = self.Box
+						if
+							V and not V:IsDescendantOf(workspace)
+							or self.RootPart
+								and not V
+								and not self.RootPart:IsDescendantOf(workspace)
+								and not self.dontDestroyMePlz
+						then
+							if V or self.RootPart then
+								self:destroy()
+							end
+							return
+						end
+						if not self.Humanoid then
+							self.Humanoid = V:FindFirstChildOfClass(r[2][1][r[2][2]])
+							return
+						end
+						if not self.RootPart and self.Humanoid then
+							self.RootPart = self.Humanoid.RootPart
+							return
+						end
+						local y = self.GrabPosition and self.GrabPosition(self) or self.RootPart.Position
+						local l, n, G, z, j, e
+						if _ then
+							z = worldToViewportPoint(camera, y + ConvertVector(topRightOffset))
+							e, j = worldToViewportPoint(camera, y + ConvertVector(bottomLeftOffset))
+						end
+						if k then
+							G = worldToViewportPoint(camera, y + ConvertVector(topRightBoxOffset))
+							l, n = worldToViewportPoint(camera, y + ConvertVector(bottomLeftBoxOffset))
+						end
+						if r[0][1][r[0][2]] + 2671 ~= 5476 then
+							while true do
+							end
+						end
+						local N, o = worldToViewportPoint(camera, y + ConvertVector(nameOffset))
+						U.Visible = o
+						if _ then
+							_.Visible = j
+						end
+						if k then
+							k.Visible = n
+						end
+						if not o then
+							return
+						end
+						if U.Visible then
+							U.Text = self.NameGrabber(self)
+						end
+						U.Position = Vector2.new(N.X, N.Y)
+						if k then
+							k.PointA = v2new(G.X, G.Y)
+							k.PointB = v2new(l.X, G.Y)
+							k.PointC = v2new(l.X, l.Y)
+							k.PointD = v2new(G.X, l.Y)
+						end
+						if j and n and o and _ then
+							if r[6][1][r[6][2]] + 3485 ~= 12068 then
+								while true do
+								end
+							end
+							local C = z.Y - e.Y
+							local q = self.Humanoid.Health / self.Humanoid.MaxHealth
+							q = q < 0 and 0 or q > 1 and 1 or q
+							J.PointA = v2new(z.X, z.Y)
+							J.PointB = v2new(e.X, z.Y)
+							J.PointC = v2new(e.X, e.Y)
+							J.PointD = v2new(z.X, e.Y)
+							_.PointA = v2new(z.X, e.Y)
+							_.PointB = v2new(e.X, e.Y)
+							_.PointC = v2new(e.X, e.Y + q * C)
+							_.PointD = v2new(z.X, e.Y + q * C)
+							_.Color = red:Lerp(green, q)
+						end
+					end
+				end
+				workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
+					camera = workspace.CurrentCamera
+				end)
+				return F
+			end
+		end,
+		function(r)
+			return function()
+				warn("[esp] running")
+				local F = math.round
+				r[0][1][r[0][2]].registerFolder(workspace:WaitForChild("Live", 9e9), function(U)
+					if
+						r[1][1][r[1][2]].Players.LocalPlayer.Character
+						and U == r[1][1][r[1][2]].Players.LocalPlayer.Character
+					then
+						return false
+					end
+					return U.Name:sub(1, 1) ~= "."
+				end, {
+					box = true,
+					healthbar = true,
+					custompositiongrabber = function(U)
+						local _ = U.Entity:GetPivot()
+						return r[2][1][r[2][2]](_.X, _.Y, _.Z)
+					end,
+					namegrabber = function(U)
+						local _ = U.Humanoid
+						return U.Entity.Name
+							.. " ["
+							.. F(_.Health)
+							.. "/"
+							.. F(_.MaxHealth)
+							.. "]"
+							.. " ["
+							.. F((U.GrabPosition(U) - r[3][1][r[3][2]].rootPart.Position).Magnitude)
+							.. "]"
+					end,
+					isOn = function()
+						return r[4][1][r[4][2]].player_esp
+					end,
+					color = Color3.fromRGB(236, 236, 236),
+				})
+				local V = {}
+				r[0][1][r[0][2]].registerFolder(workspace:WaitForChild("Live", 9e9), function(U)
+					return U.Name:sub(1, 1) == "."
+				end, {
+					custompositiongrabber = function(U)
+						local _ = U.Entity:GetPivot()
+						return r[2][1][r[2][2]](_.X, _.Y, _.Z)
+					end,
+					namegrabber = function(U)
+						local _ = U.Entity
+						local J = U.Humanoid
+						local k = V[_]
+						if k == nil then
+							k = _:GetAttribute("MOB_rich_name") or _.Name
+							V[_] = k
+						end
+						if J then
+							return k .. " [" .. F(J.Health) .. "/" .. F(J.MaxHealth) .. "]"
+						end
+						return k
+					end,
+					isOn = function(U)
+						if r[4][1][r[4][2]].mob_esp and U.Entity:FindFirstChild(r[5][1][r[5][2]]) then
+							return true
+						end
+						return false
+					end,
+					color = Color3.fromRGB(236, 94, 0),
+				})
+			end
+		end,
+	},
+	{ 0X15C5, 0X427D5BCe, 2265309135, 3783327660, 641079436, 532904814, 1115649977, 0X53ec31C2, 0x0056F39aFd }
+)(...)
